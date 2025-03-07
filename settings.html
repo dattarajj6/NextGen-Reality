@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        body {
+            background: #f0f0f5;
+            font-family: 'Inter', sans-serif;
+            color: #8B72F9;
+        }
+        .phone-container {
+            width: 390px;
+            height: 844px;
+            background: #fff;
+            border-radius: 40px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: -20px;
+            position: relative;
+        }
+        .top-bar {
+            height: 120px;
+            background: linear-gradient(135deg, #7B5CFF, #5A4FFF);
+            padding-top: 40px;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            border-top-left-radius: 40px;
+            border-top-right-radius: 40px;
+        }
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            border-radius: 12px;
+            background: #f8f8ff;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .settings-item:hover {
+            background: #e6e6ff;
+        }
+        .settings-icon img {
+            width: 24px;
+            height: 24px;
+        }
+        .settings-icon {
+            width: 36px;
+            height: 36px;
+            background: #ece9ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        .arrow-icon img {
+            width: 20px;
+            height: 20px;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background: #ddd;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .toggle-switch::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 1px;
+            left: 2px;
+            transition: 0.3s;
+        }
+        .toggle-switch.active {
+            background: #7B5CFF;
+        }
+        .toggle-switch.active::before {
+            left: 20px;
+        }
+        .logout-button {
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            background: #7B5CFF;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen">
+
+    <div class="phone-container relative">
+        <div class="top-bar">Settings</div>
+
+        <div class="px-6 py-4">
+            <div class="settings-item">
+                <div class="flex items-center">
+                    <div class="settings-icon"><img src="https://cdn4.iconfinder.com/data/icons/48-bubbles/48/43.Bell-512.png" alt="Bell"></div>
+                    <span>Notifications</span>
+                </div>
+                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+            </div>
+            <div class="settings-item">
+                <div class="flex items-center">
+                    <div class="settings-icon"><img src="https://cdn2.iconfinder.com/data/icons/essential-ui-outline-1/512/privacy_policy-512.png" alt="Privacy"></div>
+                    <span>Privacy Policy</span>
+                </div>
+                <div class="arrow-icon"><img src="2849833_arrows_navigation_forward_arrow_right_icon.png" alt="Arrow"></div>
+            </div>
+            <div class="settings-item">
+                <div class="flex items-center">
+                    <div class="settings-icon"><img src="https://cdn2.iconfinder.com/data/icons/startup-274/64/sign_contract_paper_legal_assignment-1024.png" alt="Terms"></div>
+                    <span>Terms and Conditions</span>
+                </div>
+                <div class="arrow-icon"><img src="2849833_arrows_navigation_forward_arrow_right_icon.png" alt="Arrow"></div>
+            </div>
+            <div class="settings-item">
+                <div class="flex items-center">
+                    <div class="settings-icon"><img src="https://cdn1.iconfinder.com/data/icons/ionicons-fill-vol-2/512/share-social-1024.png" alt="Share"></div>
+                    <span>Share with Friends</span>
+                </div>
+                <div class="arrow-icon"><img src="2849833_arrows_navigation_forward_arrow_right_icon.png" alt="Arrow"></div>
+            </div>
+            <div class="settings-item">
+                <div class="flex items-center">
+                    <div class="settings-icon"><img src="https://cdn2.iconfinder.com/data/icons/customer-service-13/50/Info_sign-1024.png" alt="About"></div>
+                    <span>About Us</span>
+                </div>
+                <div class="arrow-icon"><img src="2849833_arrows_navigation_forward_arrow_right_icon.png" alt="Arrow"></div>
+            </div>
+            <div class="settings-item">
+                <div class="flex items-center">
+                    <div class="settings-icon"><img src="https://cdn2.iconfinder.com/data/icons/picons-basic-2/57/basic2-088_question-512.png" alt="Help"></div>
+                    <span>Help</span>
+                </div>
+                <div class="arrow-icon"><img src="2849833_arrows_navigation_forward_arrow_right_icon.png" alt="Arrow"></div>
+            </div>
+            <div class="settings-item">
+                <div class="flex items-center">
+                    <div class="settings-icon"><img src="https://cdn0.iconfinder.com/data/icons/essentials-solid-glyphs-vol-1/100/Star-Favorite-Special-512.png" alt="Rate"></div>
+                    <span>Rate this App</span>
+                </div>
+                <div class="arrow-icon"><img src="2849833_arrows_navigation_forward_arrow_right_icon.png" alt="Arrow"></div>
+            </div>
+        </div>
+
+        <button class="logout-button">Log out</button>
+    </div>
+
+    <script>
+        function toggleSwitch(element) {
+            element.classList.toggle("active");
+        }
+    </script>
+
+</body>
+</html>

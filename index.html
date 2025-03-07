@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splash Screen</title>
+    <link href="https://fonts.cdnfonts.com/css/bastro" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/bastro');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #7551E9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #splash-screen {
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s forwards, scaleUp 0.5s forwards;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #splash-image {
+            width: 70%;
+            max-width: 180px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards;
+            animation-delay: 0.2s;
+        }
+
+        #splash-text {
+            font-family: 'Bastro', sans-serif;
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            margin-top: 15px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards;
+            animation-delay: 0.5s;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0.8);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 480px) {
+            #splash-text {
+                font-size: 28px;
+            }
+            #splash-image {
+                width: 60%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="splash-screen">
+        <img src="IMG_20250215_004706.png" alt="Logo" id="splash-image">
+        <h1 id="splash-text">NextGen Reality</h1>
+    </div>
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                window.location.href = 'explore.html';
+            }, 3000);
+        };
+    </script>
+</body>
+</html>

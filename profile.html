@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Profile Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f7f3e9;
+            padding: 20px;
+        }
+
+        .profile-container {
+            width: 350px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.7);
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .background-image {
+            width: 100%;
+            height: 150px;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #777;
+            position: relative;
+        }
+
+        .upload-bg {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 5px solid white;
+            background: #bbb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1), -2px -2px 10px rgba(255,255,255,0.7);
+            overflow: hidden;
+        }
+
+        .upload-profile {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .profile-details {
+            margin-top: 70px;
+            padding: 20px;
+        }
+
+        .username {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .edit-icon {
+            font-size: 16px;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .bio {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .like-container {
+            margin: 20px 0;
+        }
+
+        .like-btn {
+            font-size: 20px;
+            color: #888;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            background: none;
+        }
+
+        .like-btn.liked {
+            color: red;
+        }
+
+        .flashcards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 120px;
+            background: #eee;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1), -2px -2px 8px rgba(255,255,255,0.7);
+            font-size: 14px;
+            color: #777;
+        }
+
+        input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-container">
+        <!-- Background Image with Upload -->
+        <div class="background-image" id="bgImage">
+            <span>Upload Background</span>
+            <label class="upload-bg">
+                <i class="fas fa-camera"></i>
+                <input type="file" id="uploadBg" accept="image/*" onchange="changeBg(event)">
+            </label>
+        </div>
+
+        <!-- Profile Photo with Upload -->
+        <div class="profile-photo" id="profilePhoto">
+            <span>Upload Profile</span>
+            <label class="upload-profile">
+                <i class="fas fa-camera"></i>
+                <input type="file" id="uploadProfile" accept="image/*" onchange="changeProfile(event)">
+            </label>
+        </div>
+
+        <div class="profile-details">
+            <!-- Editable Username -->
+            <h2 class="username">
+                <span id="usernameText">John Doe</span>
+                <i class="fas fa-edit edit-icon" onclick="editUsername()"></i>
+            </h2>
+
+            <!-- Editable Bio -->
+            <p class="bio">
+                <span id="bioText">Travel enthusiast, food lover & photographer.</span>
+                <i class="fas fa-edit edit-icon" onclick="editBio()"></i>
+            </p>
+        </div>
+
+        <!-- Like Button -->
+        <div class="like-container">
+            <button class="like-btn" onclick="toggleLike()">
+                <i class="fas fa-heart"></i> <span id="like-count">12</span>
+            </button>
+        </div>
+
+        <!-- Flashcards -->
+        <div class="flashcards">
+            <div class="flashcard">Flashcard 1</div>
+            <div class="flashcard">Flashcard 2</div>
+            <div class="flashcard">Flashcard 3</div>
+            <div class="flashcard">Flashcard 4</div>
+            <div class="flashcard">Flashcard 5</div>
+            <div class="flashcard">Flashcard 6</div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLike() {
+            let likeBtn = document.querySelector('.like-btn');
+            let likeCount = document.getElementById('like-count');
+            likeBtn.classList.toggle('liked');
+            likeCount.innerText = likeBtn.classList.contains('liked') ? parseInt(likeCount.innerText) + 1 : parseInt(likeCount.innerText) - 1;
+        }
+
+        function changeProfile(event) {
+            let profile = document.getElementById("profilePhoto");
+            let file = URL.createObjectURL(event.target.files[0]);
+            profile.style.background = `url(${file}) no-repeat center center/cover`;
+            profile.innerHTML = "";
+        }
+
+        function changeBg(event) {
+            let bg = document.getElementById("bgImage");
+            let file = URL.createObjectURL(event.target.files[0]);
+            bg.style.background = `url(${file}) no-repeat center center/cover`;
+            bg.innerHTML = "";
+        }
+
+        function editUsername() {
+            let name = prompt("Enter new username:", document.getElementById("usernameText").innerText);
+            if (name) document.getElementById("usernameText").innerText = name;
+        }
+
+        function editBio() {
+            let bio = prompt("Enter new bio:", document.getElementById("bioText").innerText);
+            if (bio) document.getElementById("bioText").innerText = bio;
+        }
+    </script>
+
+</body>
+</html>

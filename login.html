@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #F7F0EB;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 380px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            height: 180px;
+            background: linear-gradient(135deg, #FFDDA1, #E87EA1, #8A4DFF);
+            border-radius: 0 0 40px 40px;
+            position: relative;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-button {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: bold;
+            color: black;
+        }
+
+        p {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: black;
+        }
+
+        .input-box {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid black;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .input-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            background: transparent;
+            padding: 5px;
+        }
+
+        .input-box span {
+            margin-left: 10px;
+            font-size: 18px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+        }
+
+        .options input {
+            margin-right: 5px;
+        }
+
+        .sign-in-btn {
+            width: 100%;
+            background: #8A4DFF;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px black;
+            transition: transform 0.1s;
+        }
+
+        .sign-in-btn:active {
+            transform: translateY(2px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: black;
+            margin: 0 10px;
+        }
+
+        .qr-login {
+            width: 100%;
+            background: white;
+            border: 1px solid black;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
+
+        .qr-login span {
+            margin-right: 8px;
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f44336;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="popup" id="errorPopup"></div>
+    <div class="container">
+        <div class="header">
+            <button class="back-button" onclick="goToExplore()">⬅</button>
+        </div>
+        <div class="content">
+            <h2>Sign in</h2>
+            <p>Enter your account details or Create Account</p>
+            <form onsubmit="return redirectToShowcase()">
+                <div class="input-group">
+                    <label>Email</label>
+                    <div class="input-box">
+                        <input type="email" name="email" required>
+                        <span>✉</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <div class="input-box">
+                        <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                        <span onclick="togglePassword()" style="cursor: pointer;">👁</span>
+                    </div>
+                </div>
+                <div class="options">
+                    <label><input type="checkbox"> Remember me</label>
+                    <a href="#" style="text-decoration: none; color: black;">Recover password</a>
+                </div>
+                <button type="submit" class="sign-in-btn">Sign in</button>
+                <div class="divider">or</div>
+                <a href="signup.html" class="qr-login">
+                    <span>📷</span> Create account
+                </a>
+            </form>
+        </div>
+    </div>
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        }
+
+        function goToExplore() {
+            window.location.href = "explore.html";
+        }
+
+        function redirectToShowcase() {
+            window.location.href = "showcase.html"; // Redirect to showcase.html
+            return false; // Prevent form submission
+        }
+
+        function showError(message) {
+            const popup = document.getElementById("errorPopup");
+            popup.textContent = message;
+            popup.style.display = "block";
+            setTimeout(() => {
+                popup.style.display = "none";
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
+

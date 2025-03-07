@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search & Flashcards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Other Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            background-color: #F8F8FC;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 80px; /* Adjusted for smaller navbar */
+        }
+
+        /* Navbar */
+        .navbar {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-icon {
+            width: 30px;
+            cursor: pointer;
+        }
+
+        .coins-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .coins-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .coins-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 50px;
+            padding: 8px;
+            border: 2px solid #C5B3FF;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .search-icon {
+            width: 20px;
+            height: 20px;
+            margin-left: 12px;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 12px;
+            color: #555;
+            background: transparent;
+        }
+
+        .search-results {
+            position: absolute;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            z-index: 1000;
+            display: none; /* Initially hidden */
+        }
+
+        .search-result-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #C5B3FF;
+        }
+
+        .search-result-item:hover {
+            background: #F0EFFF;
+        }
+
+        .search-button {
+            background: #A088FF;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            margin-right: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .search-button:hover {
+            background: #8B72F9;
+        }
+
+        /* Flashcards */
+        .flashcards-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px; /* Increased spacing */
+            margin-top: 20px;
+        }
+
+        .flashcard {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            width: 145px; /* Increased size */
+            height: 135px; /* Increased size */
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid #C5B3FF;
+            transition: background 0.3s ease; /* Added background transition */
+        }
+
+        .flashcard:hover {
+            background: #F0EFFF;
+        }
+
+        .flashcard img {
+            width: 50px; /* Slightly larger icons */
+            height: 50px;
+        }
+
+        .flashcard p {
+            margin-top: 18px; /* Moved text lower */
+            font-size: 14px; /* Retained font size */
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; /* Align to the bottom */
+            left: 0; /* Align to the left */
+            width: 100%; /* Full width for mobile devices */
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0; /* Padding for better touch targets */
+            box-shadow: 0 -1.5px 6px rgba(0, 0, 0, 0.08); /* Softer shadow */
+            border-radius: 10px 10px 0 0; /* Slightly rounded top corners */
+        }
+
+        .nav-item {
+            text-align: center;
+            font-size: 12px; /* Smaller text */
+            color: #777;
+            cursor: pointer;
+            position: relative; /* Added for lifting effect */
+            transition: transform 0.1s ease; /* Smooth transition for lifting effect */
+        }
+
+        .nav-item:active {
+            transform: translateY(2px); /* Lifting effect on click */
+        }
+
+        .nav-item img {
+            width: 24px; /* Smaller icons */
+            height: 24px;
+            display: block;
+            position: relative; /* Positioned in front of the effect */
+            z-index: 1;
+        }
+
+        .nav-text {
+            font-size: 12px; /* Smaller text */
+            font-weight: 600;
+            display: none; /* Hide text initially */
+            margin-top: 3px;
+            z-index: 1; /* In front of effect */
+            position: relative; /* Positioned in front of the effect */
+        }
+
+        .active {
+            color: #6A5ACD;
+            font-weight: 600;
+        }
+
+        .active .nav-text {
+            display: block; /* Show text when active */
+        }
+
+        /* Popup Modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px; /* Rounded corners for the modal */
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .redeem-button, .buy-button {
+            background: #A088FF;
+            color: white;
+            border: none;
+            border-radius: 5px; /* Rounded edges for buttons */
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .redeem-button:hover, .buy-button:hover {
+            background: #8B72F9;
+        }
+
+        #coinInput {
+            width: 80%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px; /* Rounded edges for the textbox */
+            border: 1px solid #C5B3FF; /* Border for the textbox */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <div class="navbar">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png" alt="Menu" class="menu-icon" onclick="openSettings()">
+        <div class="coins-container" onclick="openModal()">
+            <img src="https://cdn1.iconfinder.com/data/icons/game-design-butterscotch-vol-2/256/Resources-512.png" alt="Coins" class="coins-icon">
+            <span class="coins-text" id="coinBalance">0</span>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-search-strong-1024.png" alt="Search" class="search-icon">
+        <input type="text" class="search-input" id="searchInput" placeholder="Type here..." oninput="showResults()">
+        <button class="search-button" onclick="performSearch()">Search</button>
+        <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <!-- Flashcards Section -->
+    <div class="flashcards-container">
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_2_e5lc45iik5', '_blank')">
+            <img src="https://cdn0.iconfinder.com/data/icons/hippicons-nature/64/paw-512.png" alt="Zebra">
+            <p>Zebra</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_3_3vycx8pjir', '_blank')">
+            <img src="https://cdn0.iconfinder.com/data/icons/hippicons-nature/64/paw-512.png" alt="Rhion">
+            <p>Rhion</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_2_ob3ot4wpuw', '_blank')">
+            <img src="https://cdn0.iconfinder.com/data/icons/hippicons-nature/64/paw-512.png" alt="Elephant">
+            <p>Elephant</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_3_nby8f6xwhk', '_blank')">
+            <img src="https://cdn0.iconfinder.com/data/icons/hippicons-nature/64/paw-512.png" alt="Hippopotamus">
+            <p>Hippopotamus</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_3_65yce9stem', '_blank')">
+            <img src="https://cdn0.iconfinder.com/data/icons/hippicons-nature/64/paw-512.png" alt="Lion">
+            <p>Lion</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_0_pzpkng8i53', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="CPU">
+            <p>CPU</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_1_hft9hh5051', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="Graphic Card">
+            <p>Graphic Card</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_2_lr77c83qli', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="Printer">
+            <p>Printer</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_3_bx6nmn7uxs', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="Monitor">
+            <p>Monitor</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_4_enqiinv1zu', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="Hard Drive">
+            <p>Hard Drive</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_0_s5u7qqalym', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="Mouse">
+            <p>Mouse</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_1_7n3u3qkupv', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="Keyboard">
+            <p>Keyboard</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_2_ox9elr1woi', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="RAM">
+            <p>RAM</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_3_2zpw6vvrzg', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="Processor">
+            <p>Processor</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_3_9wj5yi6am0', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Owls">
+            <p>Owls</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_4_u3skj2lglv', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Sparrow">
+            <p>Sparrow</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_2_3vjhthypyc', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Duck">
+            <p>Duck</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_1_8hhon9bo6i', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Robins">
+            <p>Robins</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_0_5uxc0pr0yb', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Parrot">
+            <p>Parrot</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_3_a6ml0irmzh', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Kingfish">
+            <p>Kingfish</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_0_6iazr1p4fg', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Swan">
+            <p>Swan</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_1_h44zyl4gz6', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Hummingbird">
+            <p>Hummingbird</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_3_o7dfpdjfzp', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Goldfinchs">
+            <p>Goldfinchs</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_2_frvtumu679', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Ostrich">
+            <p>Ostrich</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_4_wmdxnutwzi', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Goos">
+            <p>Goos</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_2_ep8t9ncuq', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Vulture">
+            <p>Vulture</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_0_xblg042t9i', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Wood Packer">
+            <p>Wood Packer</p>
+        </div>
+        <div class="flashcard" onclick="window.open('https://mywebar.com/p/Project_1_j54y417cq9', '_blank')">
+            <img src="https://cdn2.iconfinder.com/data/icons/animals-47/100/008_-_dove-512.png" alt="Flamingo">
+            <p>Flamingo</p>
+        </div>
+    </div>
+
+    <script>
+        let coinBalance = 0; // Initial coin balance
+
+        function performSearch() {
+            let searchInput = document.getElementById("searchInput").value.toLowerCase();
+            let results = {
+                "biology": "Biology is the study of living organisms.",
+                "microscopic": "Microscopic refers to objects too small to be seen with the naked eye.",
+                "physics": "Physics is the study of matter, energy, and forces.",
+                "chemistry": "Chemistry is the science of elements and compounds.",
+                "mathematics": "Mathematics deals with numbers, shapes, and logic.",
+                "geology": "Geology is the study of the Earth's structure and history."
+            };
+
+            alert(results[searchInput] || "No result found."); // Show result or "No result found" if no match
+        }
+
+        function showResults() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const resultsContainer = document.getElementById("searchResults");
+            resultsContainer.innerHTML = ''; // Clear previous results
+
+            const availableResults = [
+                { name: "Biology", description: "Biology is the study of living organisms." },
+                { name: "Microscopic", description: "Microscopic refers to objects too small to be seen with the naked eye." },
+                { name: "Physics", description: "Physics is the study of matter, energy, and forces." },
+                { name: "Chemistry", description: "Chemistry is the science of elements and compounds." },
+                { name: "Mathematics", description: "Mathematics deals with numbers, shapes, and logic." },
+                { name: "Geology", description: "Geology is the study of the Earth's structure and history." },
+            ];
+
+            availableResults.forEach(item => {
+                if (item.name.toLowerCase().includes(searchInput)) {
+                    const div = document.createElement('div');
+                    div.className = 'search-result-item';
+                    div.innerText = item.name + ": " + item.description;
+                    div.onclick = () => {
+                        alert(item.description);
+                        resultsContainer.style.display = 'none'; // Hide results after selection
+                    };
+                    resultsContainer.appendChild(div);
+                }
+            });
+
+            resultsContainer.style.display = resultsContainer.innerHTML ? 'block' : 'none'; // Show if results exist
+        }
+
+        function openSettings() {
+            window.location.href = 'settings.html'; // Navigate to settings.html
+        }
+
+        function openProfile() {
+            window.location.href = 'profile.html'; // Navigate to profile.html
+        }
+
+        function openVisualizer() {
+            window.location.href = 'visualgo/indexvisualizer.html'; // Navigate to indexvisualizer.html
+        }
+
+        function openChatbot() {
+            window.open('https://cdn.botpress.cloud/webchat/v2.2/shareable.html?configUrl=https://files.bpcontent.cloud/2025/02/06/18/20250206180858-P9Z828RH.json', '_blank');
+        }
+
+        function openModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        function redeemCoins() {
+            const input = document.getElementById("coinInput").value;
+            if (input === "datta619") {
+                coinBalance += 300; // Add 300 coins
+                document.getElementById("coinBalance").innerText = coinBalance; // Update balance display
+                alert("300 coins redeemed!");
+                closeModal();
+            } else {
+                alert("Please enter a valid code.");
+            }
+        }
+
+        function buyCoins() {
+            alert("Redirecting to buy coins...");
+            // Logic for buying coins can be added here
+        }
+    </script>
+
+    <!-- Popup Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Redeem Coins</h2>
+            <input type="text" id="coinInput" placeholder="Enter code here" />
+            <button class="redeem-button" onclick="redeemCoins()">Redeem</button>
+            <button class="buy-button" onclick="buyCoins()">Buy Coins</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="openProfile()">
+            <img src="https://cdn3.iconfinder.com/data/icons/rounded-line-icons/12/icn__Profile-512.png" alt="Profile">
+            <span class="nav-text">Profile</span>
+        </div>
+        <div class="nav-item" onclick="openVisualizer()">
+            <img src="https://cdn2.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="Code Visualizer">
+            <span class="nav-text">Code Visualizer</span>
+        </div>
+        <div class="nav-item" onclick="openChatbot()">
+            <img src="https://cdn0.iconfinder.com/data/icons/artificial-intelligence-6/64/ArtificialIntelligence27-1024.png" alt="Chatbot">
+            <span class="nav-text">Chatbot</span>
+        </div>
+    </div>
+
+    <script>
+        function activateTab(selected) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            selected.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
